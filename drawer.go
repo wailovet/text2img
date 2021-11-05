@@ -21,6 +21,7 @@ type Drawer interface {
 	Draw(string) (*image.RGBA, error)
 	SetColors(color.RGBA, color.RGBA)
 	SetFontPath(string) error
+	SetFontResource([]byte) error
 	SetFontSize(float64)
 	SetTextPos(int, int)
 	SetSize(int, int)
@@ -156,6 +157,16 @@ func (d *drawer) SetFontPath(fontPath string) (err error) {
 	if err != nil {
 		return
 	}
+	f, err := freetype.ParseFont(fontBytes)
+	if err != nil {
+		return
+	}
+	d.Font = f
+	return
+}
+
+// SetColors sets the font
+func (d *drawer) SetFontResource(fontBytes []byte) (err error) {
 	f, err := freetype.ParseFont(fontBytes)
 	if err != nil {
 		return
